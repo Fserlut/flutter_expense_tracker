@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/widgets/create_nex_expense.dart';
 import 'package:expense_tracker_app/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker_app/models/expense.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,12 @@ class _ExpensesState extends State<Expenses> {
       category: Category.travel,
     )
   ];
+
+  void _openAddExpenseModal() {
+    showModalBottomSheet(
+        context: context, builder: (ctx) => const CreateNewExpense());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +42,7 @@ class _ExpensesState extends State<Expenses> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _openAddExpenseModal,
             icon: const Icon(Icons.add),
           ),
         ],
