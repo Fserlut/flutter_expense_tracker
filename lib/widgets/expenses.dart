@@ -28,9 +28,17 @@ class _ExpensesState extends State<Expenses> {
     )
   ];
 
+  void _addNewExpence(Expense e) {
+    setState(() {
+      _currenctExpenses.add(e);
+    });
+  }
+
   void _openAddExpenseModal() {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const CreateNewExpense());
+      context: context,
+      builder: (ctx) => CreateNewExpense(_addNewExpence),
+    );
   }
 
   @override
