@@ -34,8 +34,30 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense e) {
+    final expenseIndedx = _currenctExpenses.indexOf(e);
+    setState(() {
+      _currenctExpenses.remove(e);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text('Expense name: "${e.title}" deleted'),
+        action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              setState(() {
+                _currenctExpenses.insert(expenseIndedx, e);
+              });
+            }),
+      ),
+    );
+  }
+
   void _openAddExpenseModal() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => CreateNewExpense(_addNewExpence),
     );
@@ -43,6 +65,16 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget currentWidget = const Center(
+      child: Text('No expenses found'),
+    );
+
+    if (_currenctExpenses.isNotEmpty) {
+      currentWidget = ExpensesList(
+        exprenses: _currenctExpenses,
+        removeExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -59,7 +91,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text('asd'),
           Expanded(
-            child: ExpensesList(exprenses: _currenctExpenses),
+            child: currentWidget,
           ),
         ],
       ),
